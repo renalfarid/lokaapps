@@ -1,13 +1,11 @@
 <script setup>
   import {ref, onMounted, watch} from "vue"
   import { useEnrollmentStore } from "../stores/enrollment"
-  import { useStudentStore } from "../stores/student"
   import RegistrationForm from "./forms/RegistrationForm.vue"
   import ErrorEnrollment from "./enrollment/ErrorEnrollment.vue"
   
   const enrollmentStore = useEnrollmentStore()
-  const studentStore = useStudentStore()
-
+  
   const enrollmentError = ref(null)
   const isError = ref(false)
   const isVisible = ref(false)
@@ -28,7 +26,7 @@
 
   const approveStudent = async () => {
     await enrollmentStore.approveStudent()
-    await studentStore.handleAddStudent()
+    await enrollmentStore.handleAddStudent()
     handleEnrollment()
   }
 
@@ -39,7 +37,6 @@
 
   const handleApprove = (id) => {
     enrollmentStore.setId(id)
-    studentStore.setRegistrationId(id)
     enrollmentStore.setStatus('Approve')
     approveStudent()
 

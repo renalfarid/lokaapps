@@ -1,10 +1,8 @@
 <script setup>
   import {ref, onMounted} from "vue"
-  import { useCourseStore } from "../stores/course"
   import moment from "moment"
   import CourseClassForm from "./forms/CourseClassForm.vue"
   
-  const courseStore = useCourseStore()
   const courseData = ref([])
   const isVisible = ref(false)
 
@@ -19,7 +17,7 @@
   const handleCourse = async () => {
      //await courseStore.getCourseSchedule()
      //courseData.value = courseStore.apiCourse
-     console.log("jadwal kursus: ", courseData.value)
+     //console.log("jadwal kursus: ", courseData.value)
   }
 
   const convertDate = (dateCourse) => {

@@ -7,5 +7,6 @@ export function useSupabaseServices() {
     const bucketPath = import.meta.env.VITE_BUCKET_PATH
 
     const supabase = createClient(supabaseUrl, supabaseSecurityKey)
+    console.log("detect supabase", supabase)
     return supabase
 }

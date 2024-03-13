@@ -126,6 +126,26 @@ export const useEnrollmentStore = defineStore('enrollmentStore', {
             this.approveErrorError = error
             console.log("error :" , this.approveError)
         }
-      }
+      },
+      async handleAddStudent() {
+            
+        const { data, error } = await supabase
+        .from('student')
+        .insert([
+          { registration_id: this.id },
+        ])
+        .select()
+
+        if(!error){
+            this.successAddStudent = true
+            this.successMessage = 'success add student'
+            console.log("message: ", this.successMessage)
+        } else {
+            this.successAddStudent = false
+            this.studentError = error
+            console.log("student error :" , this.studentError)
+        }
+          
+    },
     }
   })
