@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { useSupabaseServices } from '../composables/useSupabaseServices'
-import { data } from 'autoprefixer'
 
 const supabase = useSupabaseServices()
 
