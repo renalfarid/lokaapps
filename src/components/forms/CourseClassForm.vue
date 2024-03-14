@@ -3,6 +3,9 @@ import { ref, onMounted } from "vue"
 import CourseCard from "./children/CourseCard.vue"
 import MentorCard from "./children/MentorCard.vue"
 import ScheduleForm from "./children/ScheduleForm.vue"
+import { useKelasStore } from "../../stores/kelas"
+
+const kelasStore = useKelasStore()
 
 const props = defineProps(['is_visible'])
 const emit = defineEmits(['close'])
@@ -29,7 +32,14 @@ const closeMentorCard = () => {
   scheduleVisible.value = true
 }
 
-const addClass = () => {
+const addClass = async () => {
+  //console.log("class name: ", kelasStore.className)
+  kelasStore.convertTime()
+  kelasStore.convertDate()
+  await kelasStore.createCourseClass()
+  //console.log("class date: ", kelasStore.courseDate)
+  //console.log("class time: ", kelasStore.courseTime)
+  //console.log("duration: ", kelasStore.courseDuration)
   closeDialog()
 }
 
@@ -39,9 +49,9 @@ onMounted(() => {
 })
 </script>
 <template>
-    <div v-if="isVisible" class="fixed inset-0 w-full h-full">
+  <div v-if="isVisible" class="fixed">
     <div class="fixed inset-0 w-full h-full bg-black opacity-40" @click="closeDialog()"></div>
-      <div class="fixed top-[40%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full mx-auto px-4">
+      <div class="fixed top-[40%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[50%] mx-auto px-4">
         <div class="w-full h-full bg-white rounded-md shadow-lg px-4 py-6">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-medium text-gray-800">
@@ -67,7 +77,7 @@ onMounted(() => {
             <ScheduleForm :is_visible="scheduleVisible" />
           </div>
           <button @click="addClass()" class="text-sm mt-3 py-2.5 px-8 flex-1 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2">
-            Simpan
+            Create
           </button>
       </div>
       

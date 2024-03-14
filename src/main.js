@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import Antd from "ant-design-vue"
+
 
 import { registerPlugins } from '@/plugins'
 
@@ -11,4 +13,5 @@ const app = createApp(App)
 registerPlugins(app)
 
 app.use(pinia)
+app.use(Antd)
 app.mount('#app')

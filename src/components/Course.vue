@@ -39,7 +39,7 @@ onMounted(() => {
       <div v-if="isVisible">
         <CourseForm :is_visible="isVisible" @close="closeDialog()" />
       </div>
-      <div class="mt-3 md:mt-3">
+      <div class="mt-3 md:mt-3 flex justify-end mr-5">
           <button
               @click="openAddCourse()"
               class="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"

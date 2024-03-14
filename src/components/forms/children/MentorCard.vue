@@ -30,8 +30,8 @@
 </script>
 <template>
     <div v-if="isVisible">
-      <ul class="mt-12 divide-y space-y-3">
-        <li v-for="(item, idx) in mentor" :key="idx" class="m-3 px-4 py-5 duration-150 hover:cursor-pointer hover:border-white hover:rounded-xl hover:bg-gray-50">
+      <ul class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <li v-for="(item, idx) in mentor" :key="idx" class="m-3 px-4 py-5 duration-150 bg-gray-50 hover:cursor-pointer hover:border-white hover:rounded-xl hover:bg-gray-100">
             <div class="flex items-center gap-x-3" @click="selectMentor(item.id)">
               <div class="bg-white w-14 h-14 border rounded-full flex items-center justify-center"><img :src="item.mentor_thumbnail" class="rounded-full" /></div>
               <div>
