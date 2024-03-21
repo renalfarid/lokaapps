@@ -4,7 +4,7 @@ import { useSupabaseServices } from '../composables/useSupabaseServices'
 const supabase = useSupabaseServices()
 
 export const useKelasStore = defineStore('kelasStore', {
-    state: () => ({ 
+  state: () => ({ 
         id: '',
         mentor_id: '',
         className: '',
@@ -21,6 +21,7 @@ export const useKelasStore = defineStore('kelasStore', {
         apiMentorList: [],
         apiCourseClass: [],
         apiClassStudent: [],
+        apiTransaction: [],
         courseError: null,
         isError: false,
         courseListError: null,
@@ -37,8 +38,8 @@ export const useKelasStore = defineStore('kelasStore', {
         countData: 0,
         totalPage: 0,
         pagination: {"total_data" : 0, "per_page" : 5, "total_page" : 0, "current_page": 1},
-    }),
-    actions: {
+  }),
+  actions: {
       setCourseId(id) {
         this.id = id
       },
@@ -147,14 +148,13 @@ export const useKelasStore = defineStore('kelasStore', {
         
       },
 
-      async fetchClass() {
+    async fetchClass() {
  
         await this.countTotalClass()
 
         this.offset = (this.page - 1) * this.perPage 
         const lastOffset = this.offset + (this.perPage -1)
-        console.log(["offset: ", this.offset], ["last offset: ", lastOffset])
-
+        
         let { data: kelas, error } = await supabase
         .from('kelas')
         .select(`
@@ -228,29 +228,6 @@ export const useKelasStore = defineStore('kelasStore', {
       }
     },
     
-    /* async addStudentToClass() {
-      
-      this.selectedStudents.map(insertStudent, this.id, this.apiMessage)
-
-      async function insertStudent (item) {  
-        
-        const { data, error } = await supabase
-        .from('kelas_student')
-        .insert([
-          { student_id: item, kelas_id: this.id }], { onConflict: ['student_id', 'kelas_id'], ignoreDuplicates: true })
-        .select()
-
-        if (error) {
-          this.apiMessage = error.message
-          console.log("error insert: ", error.message)
-        } else {
-          this.apiMessage = `success insert student ${item} to the class`
-          console.log("message :", this.apiMessage)
-        }
-        
-      }
-
-    }, */
     async fetchClassStudent(classId) {
 
       let { data: kelas_student, error } = await supabase
@@ -267,6 +244,7 @@ export const useKelasStore = defineStore('kelasStore', {
         )
       `)
       .eq('kelas_id', classId)
+      .eq('status', 'paid')
       
       if (error) {
         this.apiMessage = error.message
@@ -295,6 +273,32 @@ export const useKelasStore = defineStore('kelasStore', {
         this.apiClassStudent = classObject
         console.log("classStudent :", this.apiClassStudent)
       }
+        
+    },
+
+    async fetchTransaction() {
+
+      let { data: classTransaction, error } = await supabase
+      .from('kelas_student')
+      .select(`
+        id,
+        status,
+        student (
+          id,
+          student_name
+        ),
+        kelas (
+          id,
+          class_name
+        )
+      `)
+
+      if (error) {
+        this.apiMessage = error.message
+        //console.log("error insert: ", error.message)
+      } else { 
+        this.apiTransaction = classTransaction
+       }
         
     }
   }

@@ -1,5 +1,58 @@
 <script setup>
+  import {ref, onMounted} from "vue"
+  import { useKelasStore } from "../stores/kelas"
+
+  const kelasStore = useKelasStore()
+
+  const listTransaction = ref([])
+
+  const fetchTransaction = async () => {
+    await kelasStore.fetchTransaction()
+    listTransaction.value = kelasStore.apiTransaction
+  }
+
+  onMounted(() => {
+    fetchTransaction()
+  })
 </script>
 <template>
-    <h1>Transaction Page</h1>
+    <div class="mt-10 max-w-screen-xl mx-auto px-4 md:px-8">
+    <div class="items-start justify-between md:flex">
+        <div class="max-w-lg">
+            <h3 class="text-gray-800 text-xl font-bold sm:text-2xl">
+                Course Transaction
+            </h3>
+        </div>
+    </div>
+    <div class="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+        <table class="w-full table-auto text-sm text-left">
+            <thead class="bg-gray-50 text-gray-600 font-medium border-b">
+                <tr>
+                    <th class="py-3 px-6">Name</th>
+                    <th class="py-3 px-6">Class Name</th>
+                    <th class="py-3 px-6">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 divide-y">
+                <tr v-for="item,idx in listTransaction" :key="idx">
+                    <td class="px-6 py-4 whitespace-nowrap">{{item.student.student_name}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{item.kelas.class_name}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span v-if="item.status === 'order'" class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
+                            {{ item.status }}
+                        </span>
+                        <span v-else-if="item.status === 'paid'" class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                            {{ item.status }}
+                        </span>
+                        <span v-else-if="item.status === 'expired'" class="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
+                            {{ item.status }}
+                        </span>
+
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
 </template>
