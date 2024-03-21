@@ -7,7 +7,7 @@
   const emit = defineEmits(['close'])
   const kelasStore = useKelasStore()
 
-  const classTime = ref('');
+  const classTime = ref('08:00');
   const props = defineProps(['is_visible'])
   const isVisible = ref(false) 
   const className = ref('')
@@ -35,7 +35,7 @@
     </div>
     <div class="p-2 flex items-center gap-3 mt-4">
       <a-date-picker v-model:value="classDate" class="pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
-      <a-time-picker v-model:value="classTime" class="pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
+      <a-time-picker v-model:value="classTime" value-format="HH:mm" class="pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
       <input v-model="duration" type="number" placeholder="duration in hours" class="pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
     </div>
   </div>

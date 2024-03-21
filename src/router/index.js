@@ -79,6 +79,28 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/kelas/:id/select-student',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '/kelas/:id/select-student',
+        name: 'Select Student',
+        component: () => import('../components/pages/SelectStudent.vue'),
+      },
+    ],
+  },
+  {
+    path: '/kelas/:id/students',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '/kelas/:id/students',
+        name: 'Student Class',
+        component: () => import('../components/pages/ClassStudent.vue'),
+      },
+    ],
+  },
 ]
 
 const router = createRouter({

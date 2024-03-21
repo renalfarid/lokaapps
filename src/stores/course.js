@@ -84,6 +84,8 @@ export const useCourseStore = defineStore('courseStore', {
         }
       },
       async uploadThumbnail(file) {
+        const bucketPath = import.meta.env.VITE_BUCKET_PATH
+
         const { data, error } = await supabase.storage.from('loka').upload(file.name, file, {
                                               upsert: true,
                                       })
@@ -93,7 +95,7 @@ export const useCourseStore = defineStore('courseStore', {
         } else {
           const uploadPathFile = bucketPath + data.fullPath
           this.setBucketPath(uploadPathFile)
-          //console.log("success upload: ", this.uploadPath)
+          console.log("success upload: ", this.uploadPath)
         }
       }, 
       async handleAddCourse() {
