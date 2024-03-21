@@ -16,8 +16,6 @@
   const totalPage = ref(0)
   const totalData = ref(0)
   const pagination = ref({})
-  const pageNumber = ref(1)
-  const currentPage = ref(1)
   const pageClicked = ref(false)
   const openClassForm = () => {
     isVisible.value = true
