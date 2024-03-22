@@ -2,5 +2,5 @@
   import DefaultView from "./View.vue"
 </script>
 <template>
-    <default-view />
+    <DefaultView />
 </template>
