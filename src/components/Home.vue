@@ -1,9 +1,12 @@
 <script setup>
   import {ref, onMounted} from "vue"
   import ChartBar from "../components/chart/ChartBar.vue"
+  import { useAuthServices } from "../composables/useAuthServices"
+
+  const authServices = useAuthServices()
  
   const stats = ref([])
- 
+
   onMounted(() => {
     stats.value = [
         { data: '20+', title: 'Course' },

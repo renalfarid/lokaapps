@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useSupabaseServices } from '../composables/useSupabaseServices'
+import router from '../router'
 
 const supabase = useSupabaseServices()
 
@@ -9,7 +10,8 @@ export const useAuthStore = defineStore('authStore', {
         password: null,
         apiAuth: null,
         successMessage: null,
-        errorMessage: null
+        errorMessage: null,
+        isLogout: false,
     }),
     actions: {
         async handleAuthLogin() {
@@ -24,6 +26,21 @@ export const useAuthStore = defineStore('authStore', {
             } else {
                 this.apiAuth = data
                 localStorage.setItem('lokaSess', JSON.stringify(data.session))
+            }
+
+        },
+
+        async handleAuthLogout() {
+
+            let { error } = await supabase.auth.signOut()
+            if (error) {
+                this.errorMessage = error
+            } else {
+                this.isLogout = true
+                if (this.isLogout) {
+                    router.push("/login")
+                }
+                console.log("success: ", this.successMessage)
             }
 
         }

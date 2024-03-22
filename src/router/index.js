@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthServices } from '../composables/useAuthServices'
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
       {
         path: '/',
         name: 'Home',
+        meta: { requiresAuth: true },
         component: () => import('@/views/Home.vue'),
       },
     ],
@@ -30,6 +32,7 @@ const routes = [
     children: [
       {
         path: '/registration',
+        meta: { requiresAuth: true } ,
         name: 'Registration',
         component: () => import('@/views/Registration.vue'),
       },
@@ -41,6 +44,7 @@ const routes = [
     children: [
       {
         path: '/student',
+        meta: { requiresAuth: true },
         name: 'Student',
         component: () => import('@/views/Student.vue'),
       },
@@ -52,6 +56,7 @@ const routes = [
     children: [
       {
         path: '/mentor',
+        meta: { requiresAuth: true },
         name: 'Mentor',
         component: () => import('@/views/Mentor.vue'),
       },
@@ -63,6 +68,7 @@ const routes = [
     children: [
       {
         path: '/transaction',
+        meta: { requiresAuth: true },
         name: 'Transaction',
         component: () => import('@/views/Transaction.vue'),
       },
@@ -74,6 +80,7 @@ const routes = [
     children: [
       {
         path: '/course',
+        meta: { requiresAuth: true },
         name: 'Course',
         component: () => import('../views/Course.vue'),
       },
@@ -85,6 +92,7 @@ const routes = [
     children: [
       {
         path: '/kelas',
+        meta: { requiresAuth: true },
         name: 'Course Schedule',
         component: () => import('@/views/CourseSchedule.vue'),
       },
@@ -96,6 +104,7 @@ const routes = [
     children: [
       {
         path: '/kelas/:id/select-student',
+        meta: { requiresAuth: true },
         name: 'Select Student',
         component: () => import('../components/pages/SelectStudent.vue'),
       },
@@ -107,6 +116,7 @@ const routes = [
     children: [
       {
         path: '/kelas/:id/students',
+        meta: { requiresAuth: true },
         name: 'Student Class',
         component: () => import('../components/pages/ClassStudent.vue'),
       },
@@ -118,5 +128,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+router.beforeEach((to, from, next) => {
+  const authServices = useAuthServices();
+  const isAuthenticated = authServices.checkAuth()
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      // Redirect to login page if unauthenticated
+      next('/login')
+    } else {
+      next(); // Continue navigation
+    }
+  } else {
+    next(); // Continue navigation for routes that don't require authentication
+  }
+});
 
 export default router

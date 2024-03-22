@@ -1,21 +1,27 @@
 <script setup>
-  import { ref } from "vue"
-  import { useAuthServices } from "../composables/useAuthServices"
+ import { ref } from "vue"
+ import { useAuthServices } from "../composables/useAuthServices"
+ import router from "../router";
  
   const authServices = useAuthServices()
 
   const userEmail = ref('')
   const userPassword = ref('')
-  const authSession = ref(null)
-
+  const isLoggedIn = ref(false)
+  const errorLogin = ref('')
+  
   const handleUserAuth = async () => {
-    await authServices.authLogin(userEmail.value, userPassword.value)
-    authSession.value = JSON.parse(localStorage.getItem('lokaSess'))
-    console.log("auth data", authSession.value)
+    isLoggedIn.value = await authServices.authLogin(userEmail.value, userPassword.value)
+    console.log("isLoggedIn: ", isLoggedIn.value)
+    if (!isLoggedIn.value) {
+      errorLogin.value = "login error"
+    } else {
+      //authSession.value = JSON.parse(localStorage.getItem(localStorageKey.value))
+      router.push("/")
+    }   
   }
-
-
 </script>
+
 <template>
     <div class="w-full h-screen flex flex-col items-center justify-center px-4">
         <div class="max-w-sm w-full text-gray-600">

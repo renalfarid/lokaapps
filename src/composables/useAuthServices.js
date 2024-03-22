@@ -1,31 +1,54 @@
 import { useSupabaseServices } from './useSupabaseServices'
 
 const supabase = useSupabaseServices()
+let localStorageKey = null
+let session = null
 
 export function useAuthServices() {
 
     const authLogin = async (email, password) => {
-        let { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        })
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
     
-        if (error) {
-           const errorMessage = error
-           console.log("auth error: ", errorMessage)
-           return errorMessage
-        } else {
-            const apiAuth = data.session
-            localStorage.setItem('lokaSess', JSON.stringify(apiAuth))
+            if (error) {
+                console.error("Authentication error:", error.message)
+                return false; // Optionally, return the error message
+            } else {
+                const apiAuth = data.session
+                //localStorage.setItem('lokaSess', JSON.stringify(apiAuth));
+                console.log("Authentication successful. Session data stored in local storage.", data);
+                return true; // No error occurred
+            }
+        } catch (error) {
+            console.error("An unexpected error occurred during authentication:", error)
+            return false // Optionally, return a generic error message
         }
     }
 
     const checkAuth = () => {
-        return !!localStorage.getItem('lokaSess');
+        localStorageKey = localStorage.key(localStorageKey)
+        session = localStorage.getItem(localStorageKey)
+        if (!session) {
+            return false
+        } else {
+            return true
+        }
+        
+        //return !!localStorage.getItem(localStorageKey);
     }
 
-    const authLogout = () => {
-        localStorage.removeItem('lokaSess');
+    const authLogout = async () => {
+
+        let { error } = await supabase.auth.signOut()
+
+        if (!error) {
+            return true
+        } else {
+            return false
+        }
     }
 
     return {
