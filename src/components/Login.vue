@@ -1,9 +1,7 @@
 <script setup>
   import { ref } from "vue"
-  //import { useAuthStore } from "../stores/auth"
   import { useAuthServices } from "../composables/useAuthServices"
  
-  //const authStore = useAuthStore()
   const authServices = useAuthServices()
 
   const userEmail = ref('')
@@ -11,10 +9,7 @@
   const authSession = ref(null)
 
   const handleUserAuth = async () => {
-    //authStore.email = userEmail.value
-    //authStore.password = userPassword.value
     await authServices.authLogin(userEmail.value, userPassword.value)
-    //await authStore.handleAuthLogin()
     authSession.value = JSON.parse(localStorage.getItem('lokaSess'))
     console.log("auth data", authSession.value)
   }
