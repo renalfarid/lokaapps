@@ -11,6 +11,13 @@
     listTransaction.value = kelasStore.apiTransaction
   }
 
+  const handleApprove = async (id) => {
+    kelasStore.id = id
+    await kelasStore.handleApproveTrx()
+    fetchTransaction()
+    //console.log("id trx", id)
+  }
+
   onMounted(() => {
     fetchTransaction()
   })
@@ -31,6 +38,7 @@
                     <th class="py-3 px-6">Name</th>
                     <th class="py-3 px-6">Class Name</th>
                     <th class="py-3 px-6">Status</th>
+                    <th class="py-3 px-6"></th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 divide-y">
@@ -48,6 +56,11 @@
                             {{ item.status }}
                         </span>
 
+                    </td>
+                    <td v-if="item.status === 'order'" class="px-6 py-4 whitespace-nowrap">
+                      <button @click="handleApprove(item.id)" class="px-4 py-2 text-sm text-white duration-100 bg-indigo-600 rounded-lg shadow-md focus:shadow-none ring-offset-2 ring-indigo-600 focus:ring-2">
+                        Approve
+                      </button>
                     </td>
                     
                 </tr>

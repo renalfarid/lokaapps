@@ -292,6 +292,7 @@ export const useKelasStore = defineStore('kelasStore', {
           class_name
         )
       `)
+      .order('created_at', { ascending: false })
 
       if (error) {
         this.apiMessage = error.message
@@ -299,6 +300,23 @@ export const useKelasStore = defineStore('kelasStore', {
       } else { 
         this.apiTransaction = classTransaction
        }
+        
+    },
+
+    async handleApproveTrx() {
+      
+      const { data, error } = await supabase
+      .from('kelas_student')
+      .update({ status: 'paid' })
+      .eq('id', this.id)
+      .select()
+        
+
+      if (error) {
+        this.apiMessage = error
+      } else {
+        console.log("data: ", data)
+      }
         
     }
   }
