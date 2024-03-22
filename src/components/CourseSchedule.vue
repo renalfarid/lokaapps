@@ -17,6 +17,9 @@
   const totalData = ref(0)
   const pagination = ref({})
   const pageClicked = ref(false)
+  const currentItem = ref(0)
+  const lastItem = ref(0)
+
   const openClassForm = () => {
     isVisible.value = true
   }
@@ -27,7 +30,7 @@
   }
 
   const handlePage = (pageData) => {
-    console.log("handle page: ", pageData)
+    //console.log("handle page: ", pageData)
     pageClicked.value = true
     page.value = pageData
     kelasStore.page = pageData
@@ -38,9 +41,11 @@
     await kelasStore.fetchClass()
     courseData.value = kelasStore.apiCourse 
     pagination.value = kelasStore.pagination
+
     totalPage.value = pagination.value.total_page
     totalData.value = pagination.value.total_data
-    console.log("total data: ", totalData.value)
+    currentItem.value = pagination.value.current_item
+    lastItem.value = pagination.value.last_item
   }
 
   const fetchClassStudent = async (id) => {
@@ -128,7 +133,7 @@
     <div class="max-w-screen-xl mx-auto mt-12 px-4 text-gray-600 md:px-8">
           <div class="hidden justify-between text-sm md:flex">
               <div>
-                  SHOWING {{ page }} - {{ perPage }} OF {{ totalData || 0 }}
+                  SHOWING {{ currentItem }} - {{ lastItem }} OF {{ totalData || 0 }}
               </div>
               <div class="flex items-center gap-12" aria-label="Pagination">
                   <button @click="handlePage(page - 1)" :disabled="page === 1" class="hover:text-indigo-600">

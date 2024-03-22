@@ -1,14 +1,32 @@
 <script setup>
-  import {ref, onMounted} from "vue"
+  import {ref, reactive, onMounted} from "vue"
   import { useKelasStore } from "../stores/kelas"
+  import Pagination from "./pagination/Pagination.vue" 
 
+  const transaction = ref({
+    "page": 1,
+    "perPage": 5,
+    "totalPage": 10,
+    "totalData": 0,
+    "currentItem": 0,
+    "lastItem": 4
+  })
   const kelasStore = useKelasStore()
 
   const listTransaction = ref([])
 
   const fetchTransaction = async () => {
     await kelasStore.fetchTransaction()
+    updateTrx()
+    //console.log("transaction: ", transaction.value)
     listTransaction.value = kelasStore.apiTransaction
+  }
+
+  const updateTrx = () => {
+    transaction.value.totalData = kelasStore.pagination.total_data
+    transaction.value.totalPage = kelasStore.pagination.total_page
+    transaction.value.currentItem = kelasStore.pagination.current_item
+    transaction.value.lastItem = kelasStore.pagination.last_item
   }
 
   const handleApprove = async (id) => {
@@ -16,6 +34,10 @@
     await kelasStore.handleApproveTrx()
     fetchTransaction()
     //console.log("id trx", id)
+  }
+
+  const updateTransaction = () => {
+    fetchTransaction()
   }
 
   onMounted(() => {
@@ -67,5 +89,6 @@
             </tbody>
         </table>
     </div>
+    <Pagination :data="transaction" @update="updateTransaction" />
   </div>
 </template>

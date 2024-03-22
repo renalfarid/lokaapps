@@ -37,7 +37,7 @@ export const useKelasStore = defineStore('kelasStore', {
         offset: 0,
         countData: 0,
         totalPage: 0,
-        pagination: {"total_data" : 0, "per_page" : 5, "total_page" : 0, "current_page": 1},
+        pagination: {"total_data" : 0, "per_page" : 5, "total_page" : 0, "current_page": 1, "current_item": 0, "last_item": 4},
   }),
   actions: {
       setCourseId(id) {
@@ -152,8 +152,10 @@ export const useKelasStore = defineStore('kelasStore', {
  
         await this.countTotalClass()
 
-        this.offset = (this.page - 1) * this.perPage 
+        this.offset = (this.page - 1) * this.perPage
+        this.pagination.current_item = this.offset
         const lastOffset = this.offset + (this.perPage -1)
+        this.pagination.last_item = lastOffset
         
         let { data: kelas, error } = await supabase
         .from('kelas')
@@ -174,6 +176,7 @@ export const useKelasStore = defineStore('kelasStore', {
         `)
         .order('created_at', { ascending: false })
         .range(this.offset, lastOffset)
+
         if (error) {
           this.apiMessage = error.message
         } else {
@@ -271,12 +274,34 @@ export const useKelasStore = defineStore('kelasStore', {
         }
 
         this.apiClassStudent = classObject
-        console.log("classStudent :", this.apiClassStudent)
+        //console.log("classStudent :", this.apiClassStudent)
       }
         
     },
 
+    async fetchTotalTransaction () {
+      let { data: total, error } = await supabase
+        .from('kelas_student')
+        .select('*', {count: "exact"})
+
+        if(error) {
+          this.countData = 0
+        } else {
+          this.countData = total.length
+          this.pagination.total_data = total.length
+        }
+    },
+
     async fetchTransaction() {
+
+      await this.fetchTotalTransaction()
+      this.offset = (this.page - 1) * this.perPage 
+      const lastOffset = this.offset + (this.perPage -1)
+
+      this.pagination.current_item = this.offset
+      this.pagination.last_item = lastOffset
+
+      //console.log("offset: ", [this.offset, lastOffset])
 
       let { data: classTransaction, error } = await supabase
       .from('kelas_student')
@@ -293,12 +318,16 @@ export const useKelasStore = defineStore('kelasStore', {
         )
       `)
       .order('created_at', { ascending: false })
+      .range(this.offset, lastOffset)
 
       if (error) {
         this.apiMessage = error.message
         //console.log("error insert: ", error.message)
       } else { 
+        let totalPage = Math.ceil(this.countData / this.perPage)
+        this.pagination.total_page = totalPage
         this.apiTransaction = classTransaction
+        //console.log("api transaction", this.apiTransaction)
        }
         
     },
