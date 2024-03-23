@@ -28,6 +28,22 @@ export function useAuthServices() {
         }
     }
 
+    async function signUpNewUser(email, password) {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            redirectTo: '/confirmation'
+          }
+        });
+        if (error) {
+            return error
+        } else {
+            return data
+        }
+        // Handle the response and errors
+      }
+
     const checkAuth = () => {
         localStorageKey = localStorage.key(localStorageKey)
         session = localStorage.getItem(localStorageKey)
@@ -54,6 +70,7 @@ export function useAuthServices() {
     return {
         authLogin,
         checkAuth,
+        signUpNewUser,
         authLogout
     }
 

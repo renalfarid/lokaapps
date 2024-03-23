@@ -9,14 +9,18 @@
   const userPassword = ref('')
   const isLoggedIn = ref(false)
   const errorLogin = ref('')
+  const isLoading = ref(false)
   
   const handleUserAuth = async () => {
+    isLoading.value = true
     isLoggedIn.value = await authServices.authLogin(userEmail.value, userPassword.value)
     console.log("isLoggedIn: ", isLoggedIn.value)
     if (!isLoggedIn.value) {
       errorLogin.value = "login error"
+      isLoading.value = false
     } else {
       //authSession.value = JSON.parse(localStorage.getItem(localStorageKey.value))
+      isLoading.value = false
       router.push("/")
     }   
   }
@@ -28,11 +32,14 @@
             <div class="text-center">
                 <img src="/images/loka.jpeg" width="150" class="mx-auto" />
                 <div class="mt-5 space-y-2">
-                    <p class="">Don't have an account? <a href="javascript:void(0)" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up</a></p>
+                    <p class="">Don't have an account? <a href="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up</a></p>
                 </div>
             </div>
+            <div v-if="isLoading" class="flex justify-center">
+             <img width="50" height="50" src="/images/loader.svg" />
+            </div>
             <form
-                onsubmit="event.preventDefault()"
+                @submit.prevent="handleUserAuth()"
                 class="mt-8 space-y-5"
             >
                 <div>
@@ -47,7 +54,7 @@
                     </label>
                     <input v-model="userPassword" type="password" required class="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"/>
                 </div>
-                <button @click="handleUserAuth()" class="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150">
+                <button class="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150">
                     Sign in
                 </button>
                 <div class="text-center">

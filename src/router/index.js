@@ -15,6 +15,28 @@ const routes = [
     ],
   },
   {
+    path: '/signup',
+    component: () => import('@/layouts/default/Blank.vue'),
+    children: [
+      {
+        path: '/signup',
+        name: 'Signup',
+        component: () => import('@/views/Signup.vue'),
+      },
+    ],
+  },
+  {
+    path: '/confirmation',
+    component: () => import('@/layouts/default/Blank.vue'),
+    children: [
+      {
+        path: '/confirmation',
+        name: 'Confirmation',
+        component: () => import('@/views/Confirmation.vue'),
+      },
+    ],
+  },
+  {
     path: '/',
     component: () => import('@/layouts/default/Default.vue'),
     children: [

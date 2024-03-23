@@ -1,7 +1,3 @@
-<template>
-    <button @click="handleLogout()" class="logout-button">Logout</button>
-</template>
-
 <script setup>
 import { ref } from "vue"
 import { useAuthServices } from "../composables/useAuthServices"
@@ -20,3 +16,16 @@ const handleLogout = async () => {
 }
 
 </script>
+
+<template>
+    <div class="flex justify-center mb-10">
+        <button @click="handleLogout()" class="logout-button hover:bg-gray-200 hover:text-gray-600 hover:rounded-lg">Logout</button>
+    </div>
+    
+</template>
+<style>
+.logout-button {
+  padding: 8px 16px; /* Example styling */
+  cursor: pointer; /* Example styling */
+}
+</style>

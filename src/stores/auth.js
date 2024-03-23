@@ -6,8 +6,8 @@ const supabase = useSupabaseServices()
 
 export const useAuthStore = defineStore('authStore', {
     state: () => ({ 
-        email: null,
-        password: null,
+        email: '',
+        password: '',
         apiAuth: null,
         successMessage: null,
         errorMessage: null,
@@ -43,6 +43,24 @@ export const useAuthStore = defineStore('authStore', {
                 console.log("success: ", this.successMessage)
             }
 
+        },
+
+        async handleSignup() {
+            console.log(this.email, this.password)
+            let { data, error } = await supabase.auth.signUp({
+                email: this.email,
+                password: this.password
+            })
+    
+            if (error) {
+                this.errorMessage = error
+                console.log('error signup: ', this.errorMessage)
+                //return error
+            } else {
+                this.apiAuth = data
+                console.log('signup: ', this.apiAuth)
+                //return data
+            }
         }
     }
 })

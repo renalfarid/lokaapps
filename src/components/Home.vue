@@ -2,6 +2,15 @@
   import {ref, onMounted} from "vue"
   import ChartBar from "../components/chart/ChartBar.vue"
   import { useAuthServices } from "../composables/useAuthServices"
+  import router from "../router";
+  const error = ref(null);
+  
+  // Parse URL parameters
+  const urlParams = new URLSearchParams(window.location.hash.substr(1));
+  if (urlParams.has('error')) {
+    router.push("/login")
+    error.value = urlParams.get('error_description');
+  }
 
   const authServices = useAuthServices()
  
