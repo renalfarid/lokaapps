@@ -11,15 +11,14 @@
   const errorLogin = ref('')
   const isLoading = ref(false)
   
-  const handleUserAuth = async () => {
+  const handleUserAuth = async() => {
     isLoading.value = true
-    isLoggedIn.value = await authServices.authLogin(userEmail.value, userPassword.value)
+    isLoggedIn.value =  await authServices.authLogin(userEmail.value, userPassword.value)
     console.log("isLoggedIn: ", isLoggedIn.value)
     if (!isLoggedIn.value) {
       errorLogin.value = "login error"
       isLoading.value = false
     } else {
-      //authSession.value = JSON.parse(localStorage.getItem(localStorageKey.value))
       isLoading.value = false
       router.push("/")
     }   

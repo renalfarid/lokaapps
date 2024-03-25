@@ -4,6 +4,28 @@ import { useAuthServices } from '../composables/useAuthServices'
 
 const routes = [
   {
+    path: '/ai-test',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '/ai-test',
+        name: 'AiTest',
+        component: () => import('@/views/AiTest.vue'),
+      },
+    ],
+  },
+  {
+    path: '/lokaquiz',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '/lokaquiz',
+        name: 'LokaQuiz',
+        component: () => import('@/views/LokaQuiz.vue'),
+      },
+    ],
+  },
+  {
     path: '/login',
     component: () => import('@/layouts/default/Blank.vue'),
     children: [

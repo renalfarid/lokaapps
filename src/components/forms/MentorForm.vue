@@ -48,7 +48,7 @@
   })
 </script>
 <template>
-    <div v-if="isVisible" class="fixed inset-0 w-full h-full">
+  <div v-if="isVisible" class="fixed inset-0 w-full h-full">
     <div class="fixed inset-0 w-full h-full bg-black opacity-40" @click="closeDialog()"></div>
       <div class="fixed top-[40%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full mx-auto px-4">
         <div class="w-full h-full bg-white rounded-md shadow-lg px-4 py-6">
