@@ -15,9 +15,8 @@
   const aiScore = ref(null)
   
   
-  
   const makeQuestion = () => {
-    question.value = "How to add item to sessionstorage in JavaScript ?"
+    question.value = "The solution set of x + 2y = -3, y + 2z = 4, and x + y + 2z = 5 is {(x,y,z)} . The value of x + z ? "
   }
 
   const checkAnswer = () => {
@@ -30,7 +29,7 @@
   
   const buildPrompt = () => {
     const scoringRule = "Give score bellow 50 if the answer is wrong or not completed. Give ascore above 50 if the answer right "
-    const promptContext = `You are expert programmer, It is your job to help teachers evaluate assignment and give score between 10-100 using valid json format like {"score": your score 10-100, "reason": short reason}, dont give other character.`
+    const promptContext = `You are expert teacher, It is your job to help teachers evaluate assignment and give score between 10-100 using valid json format like {"score": your score 10-100, "reason": short reason}, dont give other character.`
     userPrompt.value = scoringRule + promptContext + " question is: " + question.value + " and " + "student answer is: " + answer.value
     //console.log("prompt: ", userPrompt.value)
   }
@@ -68,6 +67,8 @@
         return `<p class="${colorClass}">Your score is: ${score.value}</p>
           <p>Reason : ${reason.value}</p>`;
     })
+
+  
 
 
   onMounted(() => {

@@ -1,19 +1,40 @@
 <script setup>
- import {ref} from "vue"
+ import { onMounted, ref } from "vue"
  import quizForm from "./forms/QuizForm.vue"
+ import { useQuizStore } from "../stores/quiz"
+
+ const quizStore = useQuizStore()
 
  const isOpenForm = ref(false)
 
  const quizList = ref([])
+ const courseList = ref([])
 
  const closeQuizForm = () => {
   isOpenForm.value = false
+  fetchQuiz()
  }
 
- const openQuizForm = () => {
-  isOpenForm.value = true
-  console.log("open form", isOpenForm.value)
+ const fetchCourseList = async () => {
+    await quizStore.fetchCourse()
+    courseList.value = quizStore.apiCourse
+    //console.log("api course: ", courseList.value)
  }
+
+ const fetchQuiz = async () => {
+    await quizStore.fetchQuiz()
+    console.log("quiz list: ", quizStore.apiQuiz)
+    quizList.value = quizStore.apiQuiz
+ }
+
+ const openQuizForm = async () => {
+  await fetchCourseList()
+  isOpenForm.value = true
+ }
+
+ onMounted(() => {
+    fetchQuiz()
+ })
 
 </script>
 <template>
@@ -38,14 +59,12 @@
             <thead class="bg-gray-50 text-gray-600 font-medium border-b">
                 <tr>
                     <th class="py-3 px-6">Course Name</th>
-                    <th class="py-3 px-6">Class Name</th>
                     <th class="py-3 px-6">Question</th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 divide-y">
                 <tr v-for="item,idx in quizList" :key="idx">
-                    <td class="px-6 py-4 whitespace-nowrap">{{item.course.name}}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{item.class.name}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{item.course.course_name}}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{item.question}}</td>
                 </tr>
             </tbody>
@@ -53,6 +72,6 @@
     </div>
   </div>
   <div v-if="isOpenForm">
-    <quizForm :is_visible="isOpenForm" @close="closeQuizForm()"/>
+    <quizForm :is_visible="isOpenForm" :course="courseList" @close="closeQuizForm()"/>
   </div>
 </template>

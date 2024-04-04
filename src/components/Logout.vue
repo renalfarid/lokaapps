@@ -23,7 +23,7 @@ const handleLogout = async () => {
     </div>
     
 </template>
-<style>
+<style scoped>
 .logout-button {
   padding: 8px 16px; /* Example styling */
   cursor: pointer; /* Example styling */

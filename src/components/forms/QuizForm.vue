@@ -1,29 +1,36 @@
 <script setup>
   import { onMounted, ref } from "vue"
-  const props = defineProps(['is_visible'])
+  import { useQuizStore } from "../../stores/quiz"
+
+  const props = defineProps(['is_visible', 'course'])
   const emit = defineEmits(['close'])
+
+  const quizStore = useQuizStore()
 
   console.log("props: ", props.is_visible)
 
-  const courseName = ref('')
-  const className = ref('')
   const question = ref('')
   const isVisible = ref(false)
-  const selected = ref('Class Name')
+  const selectedCourse = ref('')
+  const courseList = ref([])
 
   const closeDialog = () => {
     emit('close')
   }
-  const addQuiz = () => {
-
+  const addQuiz = async () => {
+    quizStore.course_id = selectedCourse.value
+    quizStore.question = question.value
+    await quizStore.addQuiz()
+    closeDialog()
+    //console.log("result: ", quizStore.apiMessage)
+    //console.log("question: ", question.value)
   }
 
-  const getClassNameOption = async () => {
-    //await fetchSelectedClass()
-  }
 
   onMounted(() => {
     isVisible.value = props.is_visible
+    courseList.value = props.course
+    //console.log("course list", courseList.value)
   })
 </script>
 <template>
@@ -52,17 +59,12 @@
                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                 clipRule="evenodd" />
             </svg>
-            <select v-model="className" class="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
-                <option value="" :selected="selected" disabled>Class Name</option>
-                <option>Software engineer</option>
-                <option>IT manager</option>
-                <option>UI / UX designer</option>
+            <select v-model="selectedCourse" class="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
+              <option value="" disabled selected>Course Name</option>
+              <option v-for="course in courseList" :key="course.id" :value="course.id">{{ course.course_name }}</option>
             </select>
           </div>
           
-          <div class="p-2 flex items-center justify-between mt-4">
-            <input v-model="courseName" type="text" placeholder="course name" class="w-full pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
-          </div>
           <div class="p-2 flex items-center justify-between mt-4">
             <textarea v-model="question" rows="5" placeholder="question" class="w-full pl-2 pr-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
           </div>

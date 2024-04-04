@@ -4,7 +4,7 @@
 </script>
   
 <template>
-  <div class="grid md:grid-cols-4  md:grid-cols-4 grid-flow-col auto-cols-max">
+  <div class="grid md:grid-cols-4 md:grid-cols-4 grid-flow-col auto-cols-max">
     <div>
       <SideBar />
     </div>
